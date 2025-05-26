@@ -52,41 +52,26 @@
     
     <a href="https://angels207.github.io/xd/" class="button">Ir a otra página</a>
     
-     <div id="visit-counter">Visitantes únicos: 0</div>
+        
+    <div id="visit-counter">Visitas: 0</div>
+
     <script>
-        // Contador de visitantes únicos usando countapi.xyz y localStorage
+        // Contador de visitas usando localStorage
         document.addEventListener('DOMContentLoaded', () => {
-            const namespace = 'angels207-webpage-unique';
-            const key = 'visitantes_unicos';
-            const localKey = 'alreadyCountedUniqueVisitor';
-
-            // Si el usuario ya visitó, solo mostramos el número
-            function showCounter() {
-                fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('visit-counter').textContent = `Visitantes únicos: ${data.value}`;
-                    })
-                    .catch(error => {
-                        document.getElementById('visit-counter').textContent = 'No se pudo obtener el contador';
-                    });
+            // Obtener el contador de visitas desde el localStorage
+            let visitCount = localStorage.getItem('visitCount');
+            if (!visitCount) {
+                visitCount = 0;
             }
+            visitCount++;
+            localStorage.setItem('visitCount', visitCount);
 
-            if (!localStorage.getItem(localKey)) {
-                // Primera vez: incrementar el contador global de visitantes únicos
-                fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('visit-counter').textContent = `Visitantes únicos: ${data.value}`;
-                        localStorage.setItem(localKey, 'true');
-                    })
-                    .catch(error => {
-                        document.getElementById('visit-counter').textContent = 'No se pudo obtener el contador';
-                    });
-            } else {
-                // Ya visitó: solo mostrar el número actual
-                showCounter();
-            }
+            // Mostrar el contador en la página
+            document.getElementById('visit-counter').textContent = `Visitas: ${visitCount}`;
+        });
+    </script>
+</body>
+</html>
         });
     </script>
 </body>
