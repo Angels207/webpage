@@ -55,18 +55,20 @@
     <div id="visit-counter">Visitas: 0</div>
 
     <script>
-        // Contador de visitas usando localStorage
+          // Contador de visitas usando countapi.xyz (contador global)
         document.addEventListener('DOMContentLoaded', () => {
-            // Obtener el contador de visitas desde el localStorage
-            let visitCount = localStorage.getItem('visitCount');
-            if (!visitCount) {
-                visitCount = 0;
-            }
-            visitCount++;
-            localStorage.setItem('visitCount', visitCount);
+            // Cambia 'angels207-webpage' por algo único para tu página
+            const namespace = 'angels207-webpage';
+            const key = 'visitas';
 
-            // Mostrar el contador en la página
-            document.getElementById('visit-counter').textContent = `Visitas: ${visitCount}`;
+            fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('visit-counter').textContent = `Visitas: ${data.value}`;
+                })
+                .catch(error => {
+                    document.getElementById('visit-counter').textContent = 'No se pudo obtener el contador';
+                });
         });
     </script>
 </body>
