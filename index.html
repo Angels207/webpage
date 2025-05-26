@@ -52,23 +52,41 @@
     
     <a href="https://angels207.github.io/xd/" class="button">Ir a otra página</a>
     
-    <div id="visit-counter">Visitas: 0</div>
-
+     <div id="visit-counter">Visitantes únicos: 0</div>
     <script>
-          // Contador de visitas usando countapi.xyz (contador global)
+        // Contador de visitantes únicos usando countapi.xyz y localStorage
         document.addEventListener('DOMContentLoaded', () => {
-            // Cambia 'angels207-webpage' por algo único para tu página
-            const namespace = 'angels207-webpage';
-            const key = 'visitas';
+            const namespace = 'angels207-webpage-unique';
+            const key = 'visitantes_unicos';
+            const localKey = 'alreadyCountedUniqueVisitor';
 
-            fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('visit-counter').textContent = `Visitas: ${data.value}`;
-                })
-                .catch(error => {
-                    document.getElementById('visit-counter').textContent = 'No se pudo obtener el contador';
-                });
+            // Si el usuario ya visitó, solo mostramos el número
+            function showCounter() {
+                fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('visit-counter').textContent = `Visitantes únicos: ${data.value}`;
+                    })
+                    .catch(error => {
+                        document.getElementById('visit-counter').textContent = 'No se pudo obtener el contador';
+                    });
+            }
+
+            if (!localStorage.getItem(localKey)) {
+                // Primera vez: incrementar el contador global de visitantes únicos
+                fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('visit-counter').textContent = `Visitantes únicos: ${data.value}`;
+                        localStorage.setItem(localKey, 'true');
+                    })
+                    .catch(error => {
+                        document.getElementById('visit-counter').textContent = 'No se pudo obtener el contador';
+                    });
+            } else {
+                // Ya visitó: solo mostrar el número actual
+                showCounter();
+            }
         });
     </script>
 </body>
